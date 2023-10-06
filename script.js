@@ -1,6 +1,14 @@
+const displayed = document.querySelectorAll('.displayed');
+const entry = document.getElementById('entry');
 let firstNum = 0;
 let secondNum = 0;
 let operator = '';
+
+displayed.forEach(button => {
+  button.addEventListener('click', () => {
+    entry.textContent += button.textContent;
+  });
+});
 
 const add = (a, b) => {
   return a + b;
