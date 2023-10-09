@@ -1,7 +1,7 @@
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
-const entry = document.getElementById('entry');
-const current = document.getElementById('current');
+const allEntry = document.getElementById('entry');
+const currentEntry = document.getElementById('current');
 const ac_button = document.getElementById('ac');
 const ce_button = document.getElementById('ce');
 const percent_button = document.getElementById('percent');
@@ -12,43 +12,58 @@ let firstNum = 0;
 let secondNum = 0;
 let operator = '';
 
+numbers.forEach(button => button.addEventListener('click', appendNumbers));
+operators.forEach(button => button.addEventListener('click', appendOperators));
+window.addEventListener('keydown', handleKeyboardInput);
+ce_button.addEventListener('click', clearEntry);
+ac_button.addEventListener('click', clearAllEntry);
+percent_button.addEventListener('click', appendPercent);
+decimal_button.addEventListener('click', appendDecimal);
+negative_button.addEventListener('click', appendNegativeSign);
+equal_button.addEventListener('click', appendEqual);
+
 function appendNumbers(e) {
-  if (e.type === 'click') entry.innerText += `${e.target.innerText}`;
-  if (e.type === 'keydown') entry.innerText += `${e.key}`;
+  if (e.type === 'click') {
+    allEntry.textContent += e.target.textContent;
+  } 
+  if (e.type === 'keydown') {
+    allEntry.textContent += e.key;
+  }
 }
 
 function appendOperators(e) {
-  if (e.type === 'click') entry.innerText += ` ${e.target.innerText}`;
+  if (e.type === 'click') {
+    allEntry.textContent += ` ${e.target.textContent} `;
+  }
   if (e.type === 'keydown') {
-    if (e.key === '+') entry.innerText += ' +';
-    if (e.key === '-') entry.innerText += ' −';
-    if (e.key === '*') entry.innerText += ' ×';
-    if (e.key === '/') entry.innerText += ' ÷';
+    if (e.key === '+') allEntry.textContent += ' + ';
+    if (e.key === '-') allEntry.textContent += ' − ';
+    if (e.key === '*') allEntry.textContent += ' × ';
+    if (e.key === '/') allEntry.textContent += ' ÷ ';
   }
 }
 
 function appendPercent() {
-  if (e.type === 'click') entry.innerText += ` ${e.target.innerText}`;
-  if (e.type === 'keydown') entry.innerText += ` ${e.key}`;
+  // if (e.type === 'click') allEntry.textContent += ` ${e.target.textContent}`;
+  // if (e.type === 'keydown') allEntry.textContent += ` ${e.key}`;
 }
 
 function appendDecimal() {
-  // if (e.type === 'click') entry.innerText += ` ${e.target.innerText}`;
-  // if (e.type === 'keydown') entry.innerText += ` ${e.key}`;
+  // if (e.type === 'click') allEntry.textContent += ` ${e.target.textContent}`;
+  // if (e.type === 'keydown') allEntry.textContent += ` ${e.key}`;
 }
 
 function appendNegativeSign() {
-  // if (e.type === 'click') entry.innerText += ` ${e.target.innerText}`;
-  // if (e.type === 'keydown') entry.innerText += ` ${e.key}`;
+  // if (e.type === 'click') allEntry.textContent += ` ${e.target.textContent}`;
+  // if (e.type === 'keydown') allEntry.textContent += ` ${e.key}`;
 }
 
 function appendEqual() {
-  // if (e.type === 'click') entry.innerText += ` ${e.target.innerText}`;
-  // if (e.type === 'keydown') entry.innerText += ` ${e.key}`;
+  currentEntry.textContent = operate(allEntry.textContent.split(' '));
 }
 
 function clearEntry() {
-  entry.innerText = entry.innerText.slice(0, entry.innerText.length - 1);
+  allEntry.textContent = allEntry.textContent.slice(0, allEntry.textContent.length - 1);
 }
 
 function clearAllEntry() {
@@ -64,23 +79,7 @@ function handleKeyboardInput(e) {
   console.log(e);
 }
 
-window.addEventListener('keydown', handleKeyboardInput);
 
-numbers.forEach(button => button.addEventListener('click', appendNumbers));
-
-operators.forEach(button => button.addEventListener('click', appendOperators));
-
-ce_button.addEventListener('click', clearEntry);
-
-ac_button.addEventListener('click', clearAllEntry);
-
-percent_button.addEventListener('click', appendPercent);
-
-decimal_button.addEventListener('click', appendDecimal);
-
-negative_button.addEventListener('click', appendNegativeSign);
-
-equal_button.addEventListener('click', appendEqual);
 
 const add = (a, b) => {
   return a + b;
@@ -95,18 +94,21 @@ const multiply = (a, b) => {
 };
 
 const divide = (a, b) => {
+  if (a % b !== 0) return (a / b).toFixed(5);
   return a / b;
 };
 
-const operate = (operator, firstNum, secondNum) => {
+const operate = ([a, operator, b]) => {
+  a = Number(a);
+  b = Number(b);
   switch(operator) {
     case '+':
-      return add(firstNum, secondNum);
-    case '-':
-      return subtract(firstNum, secondNum);
-    case '*':
-      return multiply(firstNum, secondNum);
-    case '/':
-      return divide(firstNum, secondNum);
+      return add(a, b);
+    case '−':
+      return subtract(a, b);
+    case '×':
+      return multiply(a, b);
+    case '÷':
+      return divide(a, b);
   }
 };
