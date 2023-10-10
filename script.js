@@ -1,16 +1,14 @@
 const numbers = document.querySelectorAll('.number');
 const operators = document.querySelectorAll('.operator');
-const allEntry = document.getElementById('entry');
-const currentEntry = document.getElementById('current');
+const entry = document.getElementById('entry');
+const ans = document.getElementById('ans');
 const ac_button = document.getElementById('ac');
 const ce_button = document.getElementById('ce');
 const percent_button = document.getElementById('percent');
 const decimal_button = document.getElementById('decimal');
 const negative_button = document.getElementById('negative');
 const equal_button = document.getElementById('equal');
-let firstNum = 0;
-let secondNum = 0;
-let operator = '';
+let isOperator = false;
 
 numbers.forEach(button => button.addEventListener('click', appendNumbers));
 operators.forEach(button => button.addEventListener('click', appendOperators));
@@ -20,50 +18,69 @@ ac_button.addEventListener('click', clearAllEntry);
 percent_button.addEventListener('click', appendPercent);
 decimal_button.addEventListener('click', appendDecimal);
 negative_button.addEventListener('click', appendNegativeSign);
-equal_button.addEventListener('click', appendEqual);
+equal_button.addEventListener('click', calculate);
 
 function appendNumbers(e) {
   if (e.type === 'click') {
-    allEntry.textContent += e.target.textContent;
+    resetCalculation(e);
+    entry.textContent += e.target.textContent;
   } 
-  if (e.type === 'keydown') {
-    allEntry.textContent += e.key;
-  }
+  // if (e.type === 'keydown') {
+  //   entry.textContent += e.key;
+  // }
 }
 
 function appendOperators(e) {
-  if (e.type === 'click') {
-    allEntry.textContent += ` ${e.target.textContent} `;
+  if (!isOperator) {
+    isOperator = true;
+    resetCalculation(e);
+    if (e.type === 'click') {
+      entry.textContent += ` ${e.target.textContent} `;
+    }
+    // if (e.type === 'keydown') {
+    //   if (e.key === '+') entry.textContent += ' + ';
+    //   if (e.key === '-') entry.textContent += ' − ';
+    //   if (e.key === '*') entry.textContent += ' × ';
+    //   if (e.key === '/') entry.textContent += ' ÷ ';
+    // }
+  } else {
+    calculate();
   }
-  if (e.type === 'keydown') {
-    if (e.key === '+') allEntry.textContent += ' + ';
-    if (e.key === '-') allEntry.textContent += ' − ';
-    if (e.key === '*') allEntry.textContent += ' × ';
-    if (e.key === '/') allEntry.textContent += ' ÷ ';
+}
+
+function calculate() {
+  ans.textContent = operate(entry.textContent.split(' ').filter(value => value !== ''));
+  entry.textContent += ' =';
+  isOperator = false;
+}
+
+function resetCalculation(e) {
+  if (entry.textContent.includes('=')) {
+    if (Number(e.target.textContent)) {
+      entry.textContent = '';
+    } else {
+      entry.textContent = ans.textContent;
+    }
   }
 }
 
 function appendPercent() {
-  // if (e.type === 'click') allEntry.textContent += ` ${e.target.textContent}`;
-  // if (e.type === 'keydown') allEntry.textContent += ` ${e.key}`;
+  // if (e.type === 'click') entry.textContent += ` ${e.target.textContent}`;
+  // if (e.type === 'keydown') entry.textContent += ` ${e.key}`;
 }
 
 function appendDecimal() {
-  // if (e.type === 'click') allEntry.textContent += ` ${e.target.textContent}`;
-  // if (e.type === 'keydown') allEntry.textContent += ` ${e.key}`;
+  // if (e.type === 'click') entry.textContent += ` ${e.target.textContent}`;
+  // if (e.type === 'keydown') entry.textContent += ` ${e.key}`;
 }
 
 function appendNegativeSign() {
-  // if (e.type === 'click') allEntry.textContent += ` ${e.target.textContent}`;
-  // if (e.type === 'keydown') allEntry.textContent += ` ${e.key}`;
-}
-
-function appendEqual() {
-  currentEntry.textContent = operate(allEntry.textContent.split(' '));
+  // if (e.type === 'click') entry.textContent += ` ${e.target.textContent}`;
+  // if (e.type === 'keydown') entry.textContent += ` ${e.key}`;
 }
 
 function clearEntry() {
-  allEntry.textContent = allEntry.textContent.slice(0, allEntry.textContent.length - 1);
+  entry.textContent = entry.textContent.slice(0, entry.textContent.length - 1);
 }
 
 function clearAllEntry() {
@@ -76,7 +93,7 @@ function handleKeyboardInput(e) {
   if (e.key === '%') appendPercent();
   if (e.key === 'Backspace') clearEntry();
   if (e.key === 'Escape') clearAllEntry();
-  console.log(e);
+  // console.log(e);
 }
 
 
