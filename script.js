@@ -80,7 +80,12 @@ function appendNegativeSign() {
 }
 
 function clearEntry() {
-  entry.textContent = entry.textContent.slice(0, entry.textContent.length - 1);
+  const length = entry.textContent.length;
+  if (entry.textContent[length - 2] === ' ') {
+    entry.textContent = entry.textContent.slice(0, length - 2);
+  } else {
+    entry.textContent = entry.textContent.slice(0, length - 1);
+  }
 }
 
 function clearAllEntry() {
