@@ -10,7 +10,7 @@ const negative_button = document.getElementById('negative');
 const equal_button = document.getElementById('equal');
 const regex = /[+−×÷]/g;
 let operateValues;
-let isOperator = false;
+let isOperator;
 
 numbers.forEach(button => button.addEventListener('click', appendNumbers));
 operators.forEach(button => button.addEventListener('click', appendOperators));
@@ -33,7 +33,16 @@ function appendNumbers(e) {
   // }
 }
 
+function hasOperator(str, arr) {
+  if (str.includes('=')) return false; // reset calculator when prev cal is done
+  for (const char of arr) {
+    return (str.includes(char)) ? true : false;
+  }
+}
+
 function appendOperators(e) {
+  isOperator = hasOperator(entry.textContent, ['+', '−', '×', '÷'])
+
   if (!isOperator) {
     resetCalculation(e);
     if (e.type === 'click') {
@@ -46,7 +55,6 @@ function appendOperators(e) {
     //   if (e.key === '*') entry.textContent += ' × ';
     //   if (e.key === '/') entry.textContent += ' ÷ ';
     // }
-    isOperator = true;
   } else {
     if (entry.textContent.slice(-2, -1).match(regex)) {
       entry.textContent = entry.textContent.slice(0, -2) + `${e.target.textContent} `; // to update operator immediately
@@ -63,7 +71,6 @@ function calculate() {
   operateValues = entry.textContent.split(' ').filter(value => value !== '');
   ans.textContent = operate(operateValues);
   entry.textContent += ' =';
-  isOperator = false;
 }
 
 function resetCalculation(e) {
@@ -92,6 +99,9 @@ function appendNegativeSign() {
 
 function clearEntry() {
   if (entry.textContent.includes('=')) return; // can't clear entry after calculation has been done
+
+  // clear entry when last characters are " [operator] "
+
   if (entry.textContent.slice(-2, -1) === ' ') {
     entry.textContent = entry.textContent.slice(0, -2);
   } else {
