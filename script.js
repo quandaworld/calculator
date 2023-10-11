@@ -8,6 +8,8 @@ const percent_button = document.getElementById('percent');
 const decimal_button = document.getElementById('decimal');
 const negative_button = document.getElementById('negative');
 const equal_button = document.getElementById('equal');
+const regex = /[+−×÷]/g;
+let operateValues;
 let isOperator = false;
 
 numbers.forEach(button => button.addEventListener('click', appendNumbers));
@@ -23,6 +25,7 @@ equal_button.addEventListener('click', calculate);
 function appendNumbers(e) {
   if (e.type === 'click') {
     resetCalculation(e);
+    if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' ';
     entry.textContent += e.target.textContent;
   } 
   // if (e.type === 'keydown') {
@@ -32,9 +35,9 @@ function appendNumbers(e) {
 
 function appendOperators(e) {
   if (!isOperator) {
-    isOperator = true;
     resetCalculation(e);
     if (e.type === 'click') {
+      if (entry.textContent === '' || !Number(ans.textContent)) entry.textContent = 0; // if no firstNum or invalid ans, firstNum = 0
       entry.textContent += ` ${e.target.textContent} `;
     }
     // if (e.type === 'keydown') {
@@ -43,25 +46,33 @@ function appendOperators(e) {
     //   if (e.key === '*') entry.textContent += ' × ';
     //   if (e.key === '/') entry.textContent += ' ÷ ';
     // }
+    isOperator = true;
   } else {
-    calculate();
+    if (entry.textContent.slice(-2, -1).match(regex)) {
+      entry.textContent = entry.textContent.slice(0, -2) + `${e.target.textContent} `; // to update operator immediately
+    } else if (entry.textContent.slice(-1).match(regex)) {
+      entry.textContent = entry.textContent.slice(0, -1) + `${e.target.textContent} `;
+    } else {
+      calculate(e);
+    }
   }
 }
 
-function calculate() {
-  ans.textContent = operate(entry.textContent.split(' ').filter(value => value !== ''));
+function calculate(e) {
+  if (entry.textContent.includes('=')) return; // can't calculate if calculation has been done
+  operateValues = entry.textContent.split(' ').filter(value => value !== '');
+  ans.textContent = operate(operateValues);
   entry.textContent += ' =';
   isOperator = false;
 }
 
 function resetCalculation(e) {
-  if (entry.textContent.includes('=')) {
-    if (Number(e.target.textContent)) {
-      entry.textContent = '';
-    } else {
-      entry.textContent = ans.textContent;
-    }
-  }
+  if (!entry.textContent.includes('=')) return; // can't reset if calculation has not been done
+  if (Number(e.target.textContent)) {
+    entry.textContent = '';
+  } else {
+    entry.textContent = ans.textContent;
+  } 
 }
 
 function appendPercent() {
@@ -80,6 +91,7 @@ function appendNegativeSign() {
 }
 
 function clearEntry() {
+  if (entry.textContent.includes('=')) return; // can't clear entry after calculation has been done
   if (entry.textContent.slice(-2, -1) === ' ') {
     entry.textContent = entry.textContent.slice(0, -2);
   } else {
@@ -119,17 +131,19 @@ const divide = (a, b) => {
   return a / b;
 };
 
-const operate = ([a, operator, b]) => {
-  a = Number(a);
-  b = Number(b);
-  switch(operator) {
+const operate = (values) => {
+  if (values.length === 1) return values[0];
+  if (values.length < 3) return 'missing input';
+  values[0] = Number(values[0]);
+  values[2] = Number(values[2]);
+  switch(values[1]) {
     case '+':
-      return add(a, b);
+      return add(values[0], values[2]);
     case '−':
-      return subtract(a, b);
+      return subtract(values[0], values[2]);
     case '×':
-      return multiply(a, b);
+      return multiply(values[0], values[2]);
     case '÷':
-      return divide(a, b);
+      return divide(values[0], values[2]);
   }
 };
