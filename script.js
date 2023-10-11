@@ -53,12 +53,12 @@ function appendOperators(e) {
     } else if (entry.textContent.slice(-1).match(regex)) {
       entry.textContent = entry.textContent.slice(0, -1) + `${e.target.textContent} `;
     } else {
-      calculate(e);
+      calculate();
     }
   }
 }
 
-function calculate(e) {
+function calculate() {
   if (entry.textContent.includes('=')) return; // can't calculate if calculation has been done
   operateValues = entry.textContent.split(' ').filter(value => value !== '');
   ans.textContent = operate(operateValues);
