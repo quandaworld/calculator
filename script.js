@@ -44,7 +44,7 @@ function appendOperators(e) {
   if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
     resetCalculation(e);
     if (e.type === 'click') {
-      if (entry.textContent === '' || ans.textContent === 'missing input') entry.textContent = 0; // if no firstNum or invalid ans, firstNum = 0
+      if (entry.textContent === '') entry.textContent = 0; 
       entry.textContent += ` ${e.target.textContent} `;
     }
     // if (e.type === 'keydown') {
@@ -75,7 +75,11 @@ function resetCalculation(e) {
   if (Number(e.target.textContent)) {
     entry.textContent = '';
   } else {
-    entry.textContent = ans.textContent;
+    if (ans.textContent === 'missing input') {
+      entry.textContent = '0';
+    } else  {
+      entry.textContent = ans.textContent;
+    }
   } 
 }
 
@@ -97,10 +101,10 @@ function appendNegativeSign() {
 function clearEntry() {
   if (entry.textContent.includes('=')) return; // can't clear entry after calculation has been done
 
-  // clear entry when last characters are " [operator] "
-
   if (entry.textContent.slice(-2, -1) === ' ') {
     entry.textContent = entry.textContent.slice(0, -2);
+  } else if (entry.textContent.slice(-2, -1).match(regex)) {
+    entry.textContent = entry.textContent.slice(0, -3);
   } else {
     entry.textContent = entry.textContent.slice(0, -1);
   }
