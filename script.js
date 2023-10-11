@@ -24,7 +24,7 @@ equal_button.addEventListener('click', calculate);
 function appendNumbers(e) {
   if (e.type === 'click') {
     resetCalculation(e);
-    if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' ';
+    if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' '; // might need to move out when adding keyboard support
     entry.textContent += e.target.textContent;
   } 
   // if (e.type === 'keydown') {
@@ -44,7 +44,7 @@ function appendOperators(e) {
   if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
     resetCalculation(e);
     if (e.type === 'click') {
-      if (entry.textContent === '') entry.textContent = 0; 
+      // if (entry.textContent === '') entry.textContent = 0; 
       entry.textContent += ` ${e.target.textContent} `;
     }
     // if (e.type === 'keydown') {
@@ -71,6 +71,7 @@ function calculate() {
 }
 
 function resetCalculation(e) {
+  if (!Number(e.target.textContent) && entry.textContent === '') entry.textContent = '0';
   if (!entry.textContent.includes('=')) return; // can't reset if calculation has not been done
   if (Number(e.target.textContent)) {
     entry.textContent = '';
