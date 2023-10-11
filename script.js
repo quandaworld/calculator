@@ -33,7 +33,6 @@ function appendNumbers(e) {
 }
 
 function hasOperator(str, arr) {
-  if (str.includes('=')) return false; // reset calculator when prev cal is done
   for (const char of arr) {
     if (str.includes(char)) return true;
   }
@@ -41,8 +40,9 @@ function hasOperator(str, arr) {
 }
 
 function appendOperators(e) {
+  resetCalculation(e);
   if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
-    resetCalculation(e);
+    if (entry.textContent === '') entry.textContent = '0'; // if firstOperand is empty, set it to zero
     if (e.type === 'click') {
       entry.textContent += ` ${e.target.textContent} `;
     }
@@ -74,7 +74,6 @@ function calculate() {
 }
 
 function resetCalculation(e) {
-  if (!Number(e.target.textContent) && entry.textContent === '') return entry.textContent = '0';
   if (!hasBeenCalculated()) return; // can't reset if calculation has not been done
   if (Number(e.target.textContent)) {
     entry.textContent = '';
