@@ -37,7 +37,7 @@ function appendOperators(e) {
   if (!isOperator) {
     resetCalculation(e);
     if (e.type === 'click') {
-      if (entry.textContent === '' || !Number(ans.textContent)) entry.textContent = 0; // if no firstNum or invalid ans, firstNum = 0
+      if (entry.textContent === '' || ans.textContent === 'missing input') entry.textContent = 0; // if no firstNum or invalid ans, firstNum = 0
       entry.textContent += ` ${e.target.textContent} `;
     }
     // if (e.type === 'keydown') {
