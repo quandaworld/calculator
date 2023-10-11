@@ -22,8 +22,8 @@ negative_button.addEventListener('click', appendNegativeSign);
 equal_button.addEventListener('click', calculate);
 
 function appendNumbers(e) {
+  resetCalculation(e);
   if (e.type === 'click') {
-    resetCalculation(e);
     if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' '; // might need to move out when adding keyboard support
     entry.textContent += e.target.textContent;
   } 
@@ -44,7 +44,6 @@ function appendOperators(e) {
   if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
     resetCalculation(e);
     if (e.type === 'click') {
-      // if (entry.textContent === '') entry.textContent = 0; 
       entry.textContent += ` ${e.target.textContent} `;
     }
     // if (e.type === 'keydown') {
@@ -64,19 +63,23 @@ function appendOperators(e) {
   }
 }
 
+function hasBeenCalculated() {
+  return (entry.textContent.includes('='));
+}
+
 function calculate() {
-  if (entry.textContent.includes('=')) return; // can't calculate if calculation has been done
+  if (hasBeenCalculated()) return;
   ans.textContent = operate(entry.textContent.split(' ').filter(value => value !== ''));
   entry.textContent += ' =';
 }
 
 function resetCalculation(e) {
-  if (!Number(e.target.textContent) && entry.textContent === '') entry.textContent = '0';
-  if (!entry.textContent.includes('=')) return; // can't reset if calculation has not been done
+  if (!Number(e.target.textContent) && entry.textContent === '') return entry.textContent = '0';
+  if (!hasBeenCalculated()) return; // can't reset if calculation has not been done
   if (Number(e.target.textContent)) {
     entry.textContent = '';
   } else {
-    if (ans.textContent === 'missing input') {
+    if (!Number(ans.textContent)) {
       entry.textContent = '0';
     } else  {
       entry.textContent = ans.textContent;
@@ -85,8 +88,16 @@ function resetCalculation(e) {
 }
 
 function appendPercent() {
-  // if (e.type === 'click') entry.textContent += ` ${e.target.textContent}`;
-  // if (e.type === 'keydown') entry.textContent += ` ${e.key}`;
+  if (hasBeenCalculated()) return ans.textContent = Number(ans.textContent) / 100;
+  const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  if (currValues.length === 1) {
+    entry.textContent = Number(currValues[0]) / 100;
+  } else if (currValues.length === 3) {
+    currValues[2] = Number(currValues[2]) / 100;
+    entry.textContent = currValues.join(' ');
+  } else {
+    ans.textContent = 'invalid input';
+  }
 }
 
 function appendDecimal() {
@@ -100,8 +111,7 @@ function appendNegativeSign() {
 }
 
 function clearEntry() {
-  if (entry.textContent.includes('=')) return; // can't clear entry after calculation has been done
-
+  if (hasBeenCalculated()) return; // can't clear entry after calculation has been done
   if (entry.textContent.slice(-2, -1) === ' ') {
     entry.textContent = entry.textContent.slice(0, -2);
   } else if (entry.textContent.slice(-2, -1).match(regex)) {
