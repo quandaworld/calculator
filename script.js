@@ -9,8 +9,7 @@ const decimal_button = document.getElementById('decimal');
 const negative_button = document.getElementById('negative');
 const equal_button = document.getElementById('equal');
 const regex = /[+−×÷]/g;
-let operateValues;
-let isOperator;
+
 
 numbers.forEach(button => button.addEventListener('click', appendNumbers));
 operators.forEach(button => button.addEventListener('click', appendOperators));
@@ -36,14 +35,13 @@ function appendNumbers(e) {
 function hasOperator(str, arr) {
   if (str.includes('=')) return false; // reset calculator when prev cal is done
   for (const char of arr) {
-    return (str.includes(char)) ? true : false;
+    if (str.includes(char)) return true;
   }
+  return false;
 }
 
 function appendOperators(e) {
-  isOperator = hasOperator(entry.textContent, ['+', '−', '×', '÷'])
-
-  if (!isOperator) {
+  if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
     resetCalculation(e);
     if (e.type === 'click') {
       if (entry.textContent === '' || ans.textContent === 'missing input') entry.textContent = 0; // if no firstNum or invalid ans, firstNum = 0
@@ -68,8 +66,7 @@ function appendOperators(e) {
 
 function calculate() {
   if (entry.textContent.includes('=')) return; // can't calculate if calculation has been done
-  operateValues = entry.textContent.split(' ').filter(value => value !== '');
-  ans.textContent = operate(operateValues);
+  ans.textContent = operate(entry.textContent.split(' ').filter(value => value !== ''));
   entry.textContent += ' =';
 }
 
@@ -157,3 +154,8 @@ const operate = (values) => {
       return divide(values[0], values[2]);
   }
 };
+
+
+
+// Bugs:
+// 1. cannot perform next calculation immediately by hitting operators, will need to 2 '+' to perform a plus on ans
