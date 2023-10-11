@@ -63,18 +63,18 @@ function appendOperators(e) {
   }
 }
 
-function hasBeenCalculated() {
+function isCalculated() {
   return (entry.textContent.includes('='));
 }
 
 function calculate() {
-  if (hasBeenCalculated()) return;
+  if (isCalculated()) return;
   ans.textContent = operate(entry.textContent.split(' ').filter(value => value !== ''));
   entry.textContent += ' =';
 }
 
 function resetCalculation(e) {
-  if (!hasBeenCalculated()) return; // can't reset if calculation has not been done
+  if (!isCalculated()) return; // can't reset if calculation has not been done
   if (Number(e.target.textContent)) {
     entry.textContent = '';
   } else {
@@ -87,7 +87,13 @@ function resetCalculation(e) {
 }
 
 function appendPercent() {
-  if (hasBeenCalculated()) return ans.textContent = Number(ans.textContent) / 100;
+  if (isCalculated()) {
+    if (Number(ans.textContent)) {
+      return ans.textContent = Number(ans.textContent) / 100;
+    } else {
+    return ans.textContent = 'invalid input';
+    }
+  }
   const currValues = entry.textContent.split(' ').filter(value => value !== '');
   if (currValues.length === 1) {
     entry.textContent = Number(currValues[0]) / 100;
@@ -110,7 +116,7 @@ function appendNegativeSign() {
 }
 
 function clearEntry() {
-  if (hasBeenCalculated()) return; // can't clear entry after calculation has been done
+  if (isCalculated()) return; // can't clear entry after calculation has been done
   if (entry.textContent.slice(-2, -1) === ' ') {
     entry.textContent = entry.textContent.slice(0, -2);
   } else if (entry.textContent.slice(-2, -1).match(regex)) {
