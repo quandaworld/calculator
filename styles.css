@@ -25,7 +25,7 @@ body {
   border: 1px solid black;
   border-radius: 5px;
   padding: 5px 0;
-  width: 316.5px;
+  width: 320.5px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -34,7 +34,7 @@ body {
 
 #entry,
 #current {
-  width: 300px;
+  width: 305px;
   white-space: nowrap;
   overflow: hidden;
 }
@@ -54,7 +54,7 @@ body {
 }
 
 button {
-  width: 75px;
+  width: 76px;
   height: 60px;
   margin-top: 5px;
   border: 1px solid black;
