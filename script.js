@@ -89,7 +89,7 @@ function resetCalculation(e) {
 function appendPercent() {
   if (isCalculated()) {
     if (Number(ans.textContent)) {
-      return ans.textContent = Number(ans.textContent) / 100;
+      ans.textContent = Number(ans.textContent) / 100;
     } else {
       return ans.textContent = 'invalid input';
     }
@@ -117,8 +117,26 @@ function appendDecimal() {
 }
 
 function appendNegativeSign() {
-  // if (e.type === 'click') entry.textContent += ` ${e.target.textContent}`;
-  // if (e.type === 'keydown') entry.textContent += ` ${e.key}`;
+  if (isCalculated()) {
+    if (Number(ans.textContent)) {
+      if (ans.textContent[0] !== '-') {
+        ans.textContent = '-' + ans.textContent;
+      } else {
+        ans.textContent = ans.textContent.slice(1);
+      }
+    } else {
+      return ans.textContent = 'invalid input';
+    }
+  }
+  // const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  // if (currValues.length === 1 && !currValues[0].includes('.')) {
+  //   entry.textContent += '.';
+  // } else if (currValues.length === 2 && !currValues[1].includes('.')) {
+  //   entry.textContent += '0.';
+  // } else if (currValues.length === 3 && !currValues[2].includes('.')) {
+  //   currValues[2] += '.';
+  //   entry.textContent = currValues.join(' ');
+  // }
 }
 
 function clearEntry() {
