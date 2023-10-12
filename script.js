@@ -128,15 +128,21 @@ function appendNegativeSign() {
       return ans.textContent = 'invalid input';
     }
   }
-  // const currValues = entry.textContent.split(' ').filter(value => value !== '');
-  // if (currValues.length === 1 && !currValues[0].includes('.')) {
-  //   entry.textContent += '.';
-  // } else if (currValues.length === 2 && !currValues[1].includes('.')) {
-  //   entry.textContent += '0.';
-  // } else if (currValues.length === 3 && !currValues[2].includes('.')) {
-  //   currValues[2] += '.';
-  //   entry.textContent = currValues.join(' ');
-  // }
+  const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  if (currValues.length === 1) {
+    if (currValues[0][0] !== '-') {
+      entry.textContent = '-' + entry.textContent;
+    } else {
+      entry.textContent = entry.textContent.slice(1);
+    }
+  } else if (currValues.length === 3) {
+    if (currValues[2][0] !== '-') {
+      currValues[2] = '-' + currValues[2];
+    } else {
+      currValues[2] = currValues[2].slice(1);
+    }
+    entry.textContent = currValues.join(' ');
+  }
 }
 
 function clearEntry() {
