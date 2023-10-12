@@ -21,8 +21,13 @@ decimal_button.addEventListener('click', appendDecimal);
 negative_button.addEventListener('click', appendNegativeSign);
 equal_button.addEventListener('click', calculate);
 
+function createEntryArr() {
+  return entry.textContent.split(' ').filter(value => value !== '');
+}
+
 function appendNumbers(e) {
   resetCalculation(e);
+  if (entry.textContent === '0') return;
   if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' ';
   if (e.type === 'click') {
     entry.textContent += e.target.textContent;
@@ -70,7 +75,7 @@ function isCalculated() {
 
 function calculate() {
   if (isCalculated()) return;
-  ans.textContent = operate(entry.textContent.split(' ').filter(value => value !== ''));
+  ans.textContent = operate(createEntryArr());
   entry.textContent += ' =';
 }
 
@@ -95,7 +100,7 @@ function appendPercent() {
       return ans.textContent = 'invalid input';
     }
   }
-  const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  const currValues = createEntryArr();
   if (currValues.length === 1) {
     entry.textContent = Number(currValues[0]) / 100;
   } else if (currValues.length === 3) {
@@ -106,7 +111,7 @@ function appendPercent() {
 
 function appendDecimal() {
   if (isCalculated() || entry.textContent === '') return entry.textContent = '0.';
-  const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  const currValues = createEntryArr();
   if (currValues.length === 1 && !currValues[0].includes('.')) {
     entry.textContent += '.';
   } else if (currValues.length === 2 && !currValues[1].includes('.')) {
@@ -129,7 +134,7 @@ function appendNegativeSign() {
       return ans.textContent = 'invalid input';
     }
   }
-  const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  const currValues = createEntryArr();
   if (currValues.length === 1) {
     if (currValues[0][0] !== '-') {
       entry.textContent = '-' + entry.textContent;
@@ -158,7 +163,8 @@ function clearEntry() {
 }
 
 function clearAllEntry() {
-  location.reload(); // will be updated to reset all variables
+  entry.textContent = '';
+  ans.textContent = '';
 }
 
 function handleKeyboardInput(e) {
@@ -167,7 +173,10 @@ function handleKeyboardInput(e) {
   if (e.key === '%') appendPercent();
   if (e.key === 'Backspace') clearEntry();
   if (e.key === 'Escape') clearAllEntry();
-  // console.log(e);
+  if (e.key === 'Enter') calculate();
+  // if (e.key === '.') appendDecimal();
+  // if (e.key === '') appendNegativeSign();
+  console.log(e);
 }
 
 
