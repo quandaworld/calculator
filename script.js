@@ -91,7 +91,7 @@ function appendPercent() {
     if (Number(ans.textContent)) {
       return ans.textContent = Number(ans.textContent) / 100;
     } else {
-    return ans.textContent = 'invalid input';
+      return ans.textContent = 'invalid input';
     }
   }
   const currValues = entry.textContent.split(' ').filter(value => value !== '');
@@ -100,14 +100,20 @@ function appendPercent() {
   } else if (currValues.length === 3) {
     currValues[2] = Number(currValues[2]) / 100;
     entry.textContent = currValues.join(' ');
-  } else {
-    ans.textContent = 'invalid input';
   }
 }
 
 function appendDecimal() {
-  // if (e.type === 'click') entry.textContent += ` ${e.target.textContent}`;
-  // if (e.type === 'keydown') entry.textContent += ` ${e.key}`;
+  if (isCalculated() || entry.textContent === '') return entry.textContent = '0.';
+  const currValues = entry.textContent.split(' ').filter(value => value !== '');
+  if (currValues.length === 1 && !currValues[0].includes('.')) {
+    entry.textContent += '.';
+  } else if (currValues.length === 2 && !currValues[1].includes('.')) {
+    entry.textContent += '0.';
+  } else if (currValues.length === 3 && !currValues[2].includes('.')) {
+    currValues[2] += '.';
+    entry.textContent = currValues.join(' ');
+  }
 }
 
 function appendNegativeSign() {
@@ -179,3 +185,6 @@ const operate = (values) => {
 
 // Bugs:
 // 1. cannot perform next calculation immediately by hitting operators, will need to 2 '+' to perform a plus on ans
+
+// Refactoring:
+// 1. create handleNaN to handle 'Ans: NaN'; only if 'invalid input' handlers become repetitive among symbols functions
