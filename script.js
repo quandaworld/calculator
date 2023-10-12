@@ -216,7 +216,7 @@ const operate = (values) => {
 
   values[0] = Number(values[0]);
   values[2] = Number(values[2]);
-  
+
   switch(values[1]) {
     case '+':
       return add(values[0], values[2]);
@@ -229,11 +229,3 @@ const operate = (values) => {
       return divide(values[0], values[2]);
   }
 };
-
-
-
-// Bugs:
-// 1. cannot perform next calculation immediately by hitting operators, will need to 2 '+' to perform a plus on ans
-
-// Refactoring:
-// 1. create handleNaN to handle 'Ans: NaN'; only if 'invalid input' handlers become repetitive among symbols functions
