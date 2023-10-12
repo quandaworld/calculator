@@ -23,13 +23,13 @@ equal_button.addEventListener('click', calculate);
 
 function appendNumbers(e) {
   resetCalculation(e);
+  if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' ';
   if (e.type === 'click') {
-    if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' '; // might need to move out when adding keyboard support
     entry.textContent += e.target.textContent;
   } 
-  // if (e.type === 'keydown') {
-  //   entry.textContent += e.key;
-  // }
+  if (e.type === 'keydown') {
+    entry.textContent += e.key;
+  }
 }
 
 function hasOperator(str, arr) {
