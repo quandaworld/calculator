@@ -59,6 +59,7 @@ function appendOperators(e) {
       entry.textContent = entry.textContent.slice(0, -1) + `${e.target.textContent} `;
     } else {
       calculate();
+      entry.textContent = ans.textContent + ` ${e.target.textContent} `;
     }
   }
 }
