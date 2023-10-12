@@ -201,6 +201,7 @@ const operate = (values) => {
     case '×':
       return multiply(values[0], values[2]);
     case '÷':
+      if (values[2] === 0) return ans.textContent = 'invalid input';
       return divide(values[0], values[2]);
   }
 };
