@@ -27,8 +27,12 @@ function createEntryArr() {
 
 function appendNumbers(e) {
   resetCalculation(e);
+
+  const currValues = createEntryArr();
+  if (currValues.length === 3 && currValues[2] === '0') return;
   if (entry.textContent === '0') return;
   if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' ';
+
   if (e.type === 'click') {
     entry.textContent += e.target.textContent;
   } 
@@ -46,8 +50,10 @@ function hasOperator(str, arr) {
 
 function appendOperators(e) {
   resetCalculation(e);
+
   if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
     if (entry.textContent === '') entry.textContent = '0'; // if firstOperand is empty, set it to zero
+
     if (e.type === 'click') {
       entry.textContent += ` ${e.target.textContent} `;
     }
@@ -75,12 +81,14 @@ function isCalculated() {
 
 function calculate() {
   if (isCalculated()) return;
+
   ans.textContent = operate(createEntryArr());
   entry.textContent += ' =';
 }
 
 function resetCalculation(e) {
-  if (!isCalculated()) return; // can't reset if calculation has not been done
+  if (!isCalculated()) return;
+
   if (Number(e.target.textContent)) {
     entry.textContent = '';
   } else {
@@ -100,6 +108,7 @@ function appendPercent() {
       return ans.textContent = 'invalid input';
     }
   }
+
   const currValues = createEntryArr();
   if (currValues.length === 1) {
     entry.textContent = Number(currValues[0]) / 100;
@@ -111,6 +120,7 @@ function appendPercent() {
 
 function appendDecimal() {
   if (isCalculated() || entry.textContent === '') return entry.textContent = '0.';
+
   const currValues = createEntryArr();
   if (currValues.length === 1 && !currValues[0].includes('.')) {
     entry.textContent += '.';
@@ -134,6 +144,7 @@ function appendNegativeSign() {
       return ans.textContent = 'invalid input';
     }
   }
+
   const currValues = createEntryArr();
   if (currValues.length === 1) {
     if (currValues[0][0] !== '-') {
@@ -152,7 +163,8 @@ function appendNegativeSign() {
 }
 
 function clearEntry() {
-  if (isCalculated()) return; // can't clear entry after calculation has been done
+  if (isCalculated()) return;
+
   if (entry.textContent.slice(-2, -1) === ' ') {
     entry.textContent = entry.textContent.slice(0, -2);
   } else if (entry.textContent.slice(-2, -1).match(regex)) {
@@ -201,8 +213,10 @@ const divide = (a, b) => {
 const operate = (values) => {
   if (values.length === 1) return values[0];
   if (values.length < 3) return 'missing input';
+
   values[0] = Number(values[0]);
   values[2] = Number(values[2]);
+  
   switch(values[1]) {
     case '+':
       return add(values[0], values[2]);
