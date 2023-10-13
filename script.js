@@ -81,20 +81,24 @@ function isCalculated() {
 
 function calculate() {
   if (isCalculated()) return;
-
+  if (entry.textContent === '') entry.textContent = '0';
   ans.textContent = operate(createEntryArr());
   entry.textContent += ' =';
+}
+
+function isValidNumber(value) {
+  return (Number.isFinite(Number(value)));
 }
 
 function resetCalculation(e) {
   if (!isCalculated()) return;
 
-  if (Number(e.target.textContent)) {
+  if (isValidNumber(e.target.textContent)) {
     entry.textContent = '';
   } else {
-    if (!Number(ans.textContent)) {
+    if (!isValidNumber(ans.textContent)) {
       entry.textContent = '0';
-    } else  {
+    } else {
       entry.textContent = ans.textContent;
     }
   } 
@@ -102,8 +106,8 @@ function resetCalculation(e) {
 
 function appendPercent() {
   if (isCalculated()) {
-    if (Number(ans.textContent)) {
-      ans.textContent = Number(ans.textContent) / 100;
+    if (isValidNumber(ans.textContent)) { 
+      ans.textContent = divide(Number(ans.textContent), 100);
     } else {
       return ans.textContent = 'invalid input';
     }
@@ -111,9 +115,9 @@ function appendPercent() {
 
   const currValues = createEntryArr();
   if (currValues.length === 1) {
-    entry.textContent = Number(currValues[0]) / 100;
+    entry.textContent = divide(Number(currValues[0]), 100);
   } else if (currValues.length === 3) {
-    currValues[2] = Number(currValues[2]) / 100;
+    currValues[2] = divide(Number(currValues[2]), 100);
     entry.textContent = currValues.join(' ');
   }
 }
@@ -134,7 +138,7 @@ function appendDecimal() {
 
 function appendNegativeSign() {
   if (isCalculated()) {
-    if (Number(ans.textContent)) {
+    if (isValidNumber(ans.textContent)) {
       if (ans.textContent[0] !== '-') {
         ans.textContent = '-' + ans.textContent;
       } else {
@@ -194,33 +198,35 @@ function handleKeyboardInput(e) {
 
 
 const add = (a, b) => {
-  return a + b;
+  return toFixedWithoutZeros(a + b);
 };
 
 const subtract = (a, b) => {
-  return a - b;
+  return toFixedWithoutZeros(a - b);
 };
 
 const multiply = (a, b) => {
-  return a * b;
+  return toFixedWithoutZeros(a * b);
 };
 
 const divide = (a, b) => {
-  if (a % b !== 0) return (a / b).toFixed(5);
-  return a / b;
+  return toFixedWithoutZeros(a / b);
 };
 
-const operate = (values) => {
-  if (values.length === 1) return values[0];
-  if (values.length < 3) return 'missing input';
+const toFixedWithoutZeros = (num, precision = 20) => {
+  return `${Number.parseFloat(num.toFixed(precision))}`;
+}
 
+const operate = (values) => {
   values[0] = Number(values[0]);
+  if (values.length === 1) return toFixedWithoutZeros(values[0]);
+  if (values.length < 3) return 'missing input';
   values[2] = Number(values[2]);
 
   switch(values[1]) {
     case '+':
       return add(values[0], values[2]);
-    case '−':
+    case '−': 
       return subtract(values[0], values[2]);
     case '×':
       return multiply(values[0], values[2]);
@@ -229,3 +235,8 @@ const operate = (values) => {
       return divide(values[0], values[2]);
   }
 };
+
+// Bugs:
+
+// Refactoring:
+// Minimize entry.textContent.slice, try manipulate entryArr instead.
