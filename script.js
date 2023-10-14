@@ -25,13 +25,26 @@ function createEntryArr() {
   return entry.textContent.split(' ').filter(value => value !== '');
 }
 
+function resetCalculation(e) {
+  if (!isCalculated()) return;
+
+  if (isValidNumber(e.target.textContent)) {
+    entry.textContent = '';
+  } else {
+    if (!isValidNumber(ans.textContent)) {
+      entry.textContent = '0';
+    } else {
+      entry.textContent = ans.textContent;
+    }
+  } 
+}
+
 function appendNumbers(e) {
   resetCalculation(e);
 
   const currValues = createEntryArr();
-  if (currValues.length === 3 && currValues[2] === '0') return;
-  if (entry.textContent === '0') return;
-  if (entry.textContent.slice(-1).match(regex)) entry.textContent += ' ';
+  if (currValues.length === 1 && currValues[0] === '0') entry.textContent = '';
+  if (currValues.length === 3 && currValues[2] === '0') entry.textContent = entry.textContent.slice(0, -1);
 
   if (e.type === 'click') {
     entry.textContent += e.target.textContent;
@@ -41,17 +54,11 @@ function appendNumbers(e) {
   }
 }
 
-function hasOperator(str, arr) {
-  for (const char of arr) {
-    if (str.includes(char)) return true;
-  }
-  return false;
-}
-
 function appendOperators(e) {
   resetCalculation(e);
+  const currValues = createEntryArr();
 
-  if (!hasOperator(entry.textContent, ['+', '−', '×', '÷'])) {
+  if (!currValues[1]) { // check if operator has been input
     if (entry.textContent === '') entry.textContent = '0'; // if firstOperand is empty, set it to zero
 
     if (e.type === 'click') {
@@ -65,9 +72,7 @@ function appendOperators(e) {
     // }
   } else {
     if (entry.textContent.slice(-2, -1).match(regex)) {
-      entry.textContent = entry.textContent.slice(0, -2) + `${e.target.textContent} `; // to update operator immediately
-    } else if (entry.textContent.slice(-1).match(regex)) {
-      entry.textContent = entry.textContent.slice(0, -1) + `${e.target.textContent} `;
+      entry.textContent = entry.textContent.slice(0, -3) + ` ${e.target.textContent} `; // to update operator immediately
     } else {
       calculate();
       entry.textContent = ans.textContent + ` ${e.target.textContent} `;
@@ -88,20 +93,6 @@ function calculate() {
 
 function isValidNumber(value) {
   return (Number.isFinite(Number(value)));
-}
-
-function resetCalculation(e) {
-  if (!isCalculated()) return;
-
-  if (isValidNumber(e.target.textContent)) {
-    entry.textContent = '';
-  } else {
-    if (!isValidNumber(ans.textContent)) {
-      entry.textContent = '0';
-    } else {
-      entry.textContent = ans.textContent;
-    }
-  } 
 }
 
 function appendPercent() {
@@ -169,9 +160,7 @@ function appendNegativeSign() {
 function clearEntry() {
   if (isCalculated()) return;
 
-  if (entry.textContent.slice(-2, -1) === ' ') {
-    entry.textContent = entry.textContent.slice(0, -2);
-  } else if (entry.textContent.slice(-2, -1).match(regex)) {
+  if (entry.textContent.slice(-2, -1).match(regex)) {
     entry.textContent = entry.textContent.slice(0, -3);
   } else {
     entry.textContent = entry.textContent.slice(0, -1);
@@ -240,3 +229,4 @@ const operate = (values) => {
 
 // Refactoring:
 // Minimize entry.textContent.slice, try manipulate entryArr instead.
+// Create an updateEntryContent(value) for 'entry.textcontent +='
