@@ -56,8 +56,8 @@ function appendNumbers(e) {
 
 function appendOperators(e) {
   resetCalculation(e);
-  const currValues = createEntryArr();
 
+  const currValues = createEntryArr();
   if (!currValues[1]) { // check if operator has been input
     if (entry.textContent === '') entry.textContent = '0'; // if firstOperand is empty, set it to zero
 
@@ -119,7 +119,7 @@ function appendDecimal() {
   const currValues = createEntryArr();
   if (currValues.length === 1 && !currValues[0].includes('.')) {
     entry.textContent += '.';
-  } else if (currValues.length === 2 && !currValues[1].includes('.')) {
+  } else if (currValues.length === 2) {
     entry.textContent += '0.';
   } else if (currValues.length === 3 && !currValues[2].includes('.')) {
     currValues[2] += '.';
@@ -228,5 +228,4 @@ const operate = (values) => {
 // Bugs:
 
 // Refactoring:
-// Minimize entry.textContent.slice, try manipulate entryArr instead.
 // Create an updateEntryContent(value) for 'entry.textcontent +='
