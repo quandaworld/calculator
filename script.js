@@ -28,7 +28,7 @@ function createEntryArr() {
 function resetCalculation(e) {
   if (!isCalculated()) return;
 
-  if (isValidNumber(e.target.textContent)) {
+  if (isValidNumber(e.target.textContent) || isValidNumber(e.key)) {
     entry.textContent = '';
   } else {
     if (!isValidNumber(ans.textContent)) {
@@ -46,11 +46,17 @@ function appendNumbers(e) {
   if (currValues.length === 1 && currValues[0] === '0') entry.textContent = '';
   if (currValues.length === 3 && currValues[2] === '0') entry.textContent = entry.textContent.slice(0, -1);
 
-  if (e.type === 'click') {
-    entry.textContent += e.target.textContent;
-  } 
+  if (e.type === 'click') entry.textContent += e.target.textContent;
+  if (e.type === 'keydown') entry.textContent += e.key;
+}
+
+function appendOperatorsByEventType(e) {
+  if (e.type === 'click') entry.textContent += ` ${e.target.textContent} `;
   if (e.type === 'keydown') {
-    entry.textContent += e.key;
+    if (e.key === '+') entry.textContent += ' + ';
+    if (e.key === '-') entry.textContent += ' − ';
+    if (e.key === '*') entry.textContent += ' × ';
+    if (e.key === '/') entry.textContent += ' ÷ ';
   }
 }
 
@@ -60,22 +66,15 @@ function appendOperators(e) {
   const currValues = createEntryArr();
   if (!currValues[1]) { // check if operator has been input
     if (entry.textContent === '') entry.textContent = '0'; // if firstOperand is empty, set it to zero
-
-    if (e.type === 'click') {
-      entry.textContent += ` ${e.target.textContent} `;
-    }
-    // if (e.type === 'keydown') {
-    //   if (e.key === '+') entry.textContent += ' + ';
-    //   if (e.key === '-') entry.textContent += ' − ';
-    //   if (e.key === '*') entry.textContent += ' × ';
-    //   if (e.key === '/') entry.textContent += ' ÷ ';
-    // }
+    appendOperatorsByEventType(e);
   } else {
     if (entry.textContent.slice(-2, -1).match(regex)) {
-      entry.textContent = entry.textContent.slice(0, -3) + ` ${e.target.textContent} `; // to update operator immediately
+      entry.textContent = entry.textContent.slice(0, -3); // update operator immediately
+      appendOperatorsByEventType(e);
     } else {
       calculate();
-      entry.textContent = ans.textContent + ` ${e.target.textContent} `;
+      entry.textContent = ans.textContent;
+      appendOperatorsByEventType(e);
     }
   }
 }
@@ -178,13 +177,9 @@ function handleKeyboardInput(e) {
   if (e.key === '%') appendPercent();
   if (e.key === 'Backspace') clearEntry();
   if (e.key === 'Escape') clearAllEntry();
-  if (e.key === 'Enter') calculate();
-  // if (e.key === '.') appendDecimal();
-  // if (e.key === '') appendNegativeSign();
-  console.log(e);
+  if (e.key === 'Enter' || e.key === '=') calculate();
+  if (e.key === '.') appendDecimal();
 }
-
-
 
 const add = (a, b) => {
   return toFixedWithoutZeros(a + b);
@@ -224,8 +219,3 @@ const operate = (values) => {
       return divide(values[0], values[2]);
   }
 };
-
-// Bugs:
-
-// Refactoring:
-// Create an updateEntryContent(value) for 'entry.textcontent +='
