@@ -14,10 +14,17 @@ body {
   align-items: center;
 }
 
+.notes p {
+  margin-top: 5px;
+  text-align: center;
+  font-size: 16px;
+  font-style: italic;
+  color: gray;
+}
+
 .calculator {
-  /* border: 2px solid black; */
+  border: 2px solid black;
   border-radius: 10px;
-  margin-top: 150px;
   padding: 10px;
 }
 
@@ -64,6 +71,3 @@ button {
 footer {
   margin-bottom: 5px;
 }
-
-
-
