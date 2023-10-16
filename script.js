@@ -27,7 +27,6 @@ function createEntryArr() {
 
 function resetCalculation(e) {
   if (!isCalculated()) return;
-
   if (isValidNumber(e.target.textContent) || isValidNumber(e.key)) {
     entry.textContent = '';
   } else {
@@ -41,11 +40,9 @@ function resetCalculation(e) {
 
 function appendNumbers(e) {
   resetCalculation(e);
-
   const currValues = createEntryArr();
   if (currValues.length === 1 && currValues[0] === '0') entry.textContent = '';
   if (currValues.length === 3 && currValues[2] === '0') entry.textContent = entry.textContent.slice(0, -1);
-
   if (e.type === 'click') entry.textContent += e.target.textContent;
   if (e.type === 'keydown') entry.textContent += e.key;
 }
@@ -62,7 +59,6 @@ function appendOperatorsByEventType(e) {
 
 function appendOperators(e) {
   resetCalculation(e);
-
   const currValues = createEntryArr();
   if (!currValues[1]) { // check if operator has been input
     if (entry.textContent === '') entry.textContent = '0'; // if firstOperand is empty, set it to zero
@@ -97,12 +93,12 @@ function isValidNumber(value) {
 function appendPercent() {
   if (isCalculated()) {
     if (isValidNumber(ans.textContent)) { 
-      ans.textContent = divide(Number(ans.textContent), 100);
+      return ans.textContent = divide(Number(ans.textContent), 100);
     } else {
       return ans.textContent = 'invalid input';
     }
   }
-
+  
   const currValues = createEntryArr();
   if (currValues.length === 1) {
     entry.textContent = divide(Number(currValues[0]), 100);
@@ -130,9 +126,9 @@ function appendNegativeSign() {
   if (isCalculated()) {
     if (isValidNumber(ans.textContent)) {
       if (ans.textContent[0] !== '-') {
-        ans.textContent = '-' + ans.textContent;
+        return ans.textContent = '-' + ans.textContent;
       } else {
-        ans.textContent = ans.textContent.slice(1);
+        return ans.textContent = ans.textContent.slice(1);
       }
     } else {
       return ans.textContent = 'invalid input';
@@ -158,7 +154,6 @@ function appendNegativeSign() {
 
 function clearEntry() {
   if (isCalculated()) return;
-
   if (entry.textContent.slice(-2, -1).match(regex)) {
     entry.textContent = entry.textContent.slice(0, -3);
   } else {
