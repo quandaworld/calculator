@@ -192,7 +192,7 @@ const divide = (a, b) => {
   return toFixedWithoutZeros(a / b);
 };
 
-const toFixedWithoutZeros = (num, precision = 20) => {
+const toFixedWithoutZeros = (num, precision = 15) => {
   return `${Number.parseFloat(num.toFixed(precision))}`;
 }
 
