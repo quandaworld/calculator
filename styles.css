@@ -1,9 +1,13 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@100;300;400;700&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0; 
-  font-family: Times;
-  font-size: 22px;
+  font-family: 'Lato', sans-serif;
+  font-weight: 300;
+  font-size: 25px;
+  color: #35352C;
 }
 
 body {
@@ -12,6 +16,7 @@ body {
   height: 100vh;
   justify-content: space-between;
   align-items: center;
+  background-color: #fae17d;
 }
 
 .notes p {
@@ -19,17 +24,17 @@ body {
   text-align: center;
   font-size: 16px;
   font-style: italic;
-  color: gray;
 }
 
 .calculator {
-  border: 2px solid black;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.2);
   border-radius: 10px;
   padding: 10px;
+  background-color: white;
 }
 
 .display {
-  border: 1px solid black;
+  border: 1px solid #D1CCCC;
   border-radius: 5px;
   padding: 5px 0;
   width: 320.5px;
@@ -37,6 +42,7 @@ body {
   flex-direction: column;
   align-items: center;
   margin-bottom: 5px;
+  background-color: white;
 }
 
 #entry,
@@ -47,8 +53,8 @@ body {
 }
 
 #entry {
-  height: 50px;
-  font-size: 40px;
+  height: 60px;
+  font-size: 45px;
   display: flex;
   justify-content: flex-end;
 }
@@ -58,16 +64,66 @@ body {
   height: 30px;
   display: inline;
   text-align: end;
+  font-weight: 400;
+}
+
+.row {
+  display: flex;
+  gap: 5px;
 }
 
 button {
-  width: 76px;
+  flex-basis: 100%;
   height: 60px;
   margin-top: 5px;
-  border: 1px solid black;
+  border: 1px solid #D1CCCC;
   border-radius: 5px;
+  background-color: white;
+}
+
+button:hover {
+  background-color: rgb(244, 244, 244);
+}
+
+#ac,
+#del {
+  background-color: #367F86;
+  color: white;
+  border-color: #367F86;
+}
+
+#ac:hover,
+#del:hover {
+  background-color: #265a5f;
+  border-color: #265a5f;
+}
+
+.operator {
+  background-color: #D1CCCC;
+  border-color: #D1CCCC;
+}
+
+.operator:hover {
+  background-color: #b7b1b1;
+  border-color: #b7b1b1;
+}
+
+#equal {
+  background-color: #CA5504;
+  color: white;
+  border-color: #CA5504;
+}
+
+#equal:hover {
+  background-color: #ab4801;
+  border-color: #ab4801;
+}
+
+.function {
+  font-weight: 400;
 }
 
 footer {
   margin-bottom: 5px;
+  font-size: 18px;
 }
