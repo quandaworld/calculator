@@ -177,28 +177,28 @@ function handleKeyboardInput(e) {
 }
 
 const add = (a, b) => {
-  return toFixedWithoutZeros(a + b);
+  return roundWithoutTrailingZeros(a + b);
 };
 
 const subtract = (a, b) => {
-  return toFixedWithoutZeros(a - b);
+  return roundWithoutTrailingZeros(a - b);
 };
 
 const multiply = (a, b) => {
-  return toFixedWithoutZeros(a * b);
+  return roundWithoutTrailingZeros(a * b);
 };
 
 const divide = (a, b) => {
-  return toFixedWithoutZeros(a / b);
+  return roundWithoutTrailingZeros(a / b);
 };
 
-const toFixedWithoutZeros = (num, precision = 15) => {
+const roundWithoutTrailingZeros = (num, precision = 15) => {
   return `${Number.parseFloat(num.toFixed(precision))}`;
 }
 
 const operate = (values) => {
   values[0] = Number(values[0]);
-  if (values.length === 1) return toFixedWithoutZeros(values[0]);
+  if (values.length === 1) return roundWithoutTrailingZeros(values[0]);
   if (values.length < 3) return 'missing input';
   values[2] = Number(values[2]);
 
