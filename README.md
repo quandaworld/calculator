@@ -1,6 +1,6 @@
-# Calculator
+# Quanculator
 
-An on-screen calculator built with HTML, CSS, and vanilla JavaScript.
+Quanculator is a an on-screen calculator made by Quan 😉.
 
 
 ## Screenshots
